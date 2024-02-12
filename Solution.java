@@ -19,11 +19,50 @@ public class Main {
 
     }
 }
+/////////////////////
+public class Event {
+    private int id;
+    private String type;
+    private Object data;
+
+    int getId() {
+        return id;
+    }
+
+    String getType() {
+        return type;
+    }
+
+    Object getData() {
+        return data;
+    }
+
+    Event(int id, String type, Object data) {
+        this.id = id;
+        this.type = type;
+        this.data = data;
+    }
+}
+/////////////////////
 
 public interface EventListener {
     void onEventReceived(Event event);
 }
 
+public class EventListenerImpl implements EventListener {
+    private EventProcessor eventProcessor ;
+
+    EventListenerImpl(EventProcessor eventProcessor){
+        this.eventProcessor = eventProcessor ;
+
+    }
+    @Override
+    public void onEventReceived(Event event) {
+        eventProcessor.addEvent(event);
+        System.out.println("Event received: " + event.getData());
+    }
+}
+/////////////////////
 
 public class EventProducer {
     private EventListener eventListener;
@@ -39,29 +78,7 @@ public class EventProducer {
         eventListener.onEventReceived(new Event(2, "lala", "line 2"));
     }
 }
-
-
-public class EventListenerImpl implements EventListener {
-    private EventProcessor eventProcessor ;
-
-    EventListenerImpl(EventProcessor eventProcessor){
-        this.eventProcessor = eventProcessor ;
-
-    }
-    @Override
-    public void onEventReceived(Event event) {
-        eventProcessor.addEvent(event);
-        System.out.println("Event received: " + event.getData());
-    }
-}
-
-
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
-
+/////////////////////
 public class EventProcessor implements Runnable{
 
     private BlockingQueue<Event> eventQueue;
@@ -162,26 +179,4 @@ public class EventProcessor implements Runnable{
 
 }
 
-public class Event {
-    private int id;
-    private String type;
-    private Object data;
-
-    int getId() {
-        return id;
-    }
-
-    String getType() {
-        return type;
-    }
-
-    Object getData() {
-        return data;
-    }
-
-    Event(int id, String type, Object data) {
-        this.id = id;
-        this.type = type;
-        this.data = data;
-    }
-}
+/////////////////////
